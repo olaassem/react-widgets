@@ -1,7 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 export default function Dropdown({ options, selected, onSelectedChange }) {
 	const [open, setOpen] = useState(false);
+	const ref = useRef();
+
+	useEffect(() => {
+		document.body.addEventListener('click', (e) => {
+			if (ref.current.contains(e.target)) {
+				return;
+			}
+			setOpen(false);
+		});
+	}, []);
 
 	const renderedOptions = options.map((option) => {
 		if (option.label === selected.label) {
@@ -20,7 +30,7 @@ export default function Dropdown({ options, selected, onSelectedChange }) {
 	});
 
 	return (
-		<div className="ui form">
+		<div ref={ref} className="ui form">
 			<div className="field">
 				<label className="label">Select a Color</label>
 				<div
