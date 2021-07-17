@@ -1,7 +1,9 @@
+//TODO: 159.LIST BUILDING
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export default function Search() {
+const Search = () => {
 	const [term, setTerm] = useState('programming');
 	const [results, setResults] = useState([]);
 
@@ -20,15 +22,25 @@ export default function Search() {
 			setResults(data.query.search);
 		};
 
-		search();
+		if (term) {
+			search();
+		}
 	}, [term]);
 
 	const renderedResults = results.map((result) => {
 		return (
 			<div key={result.pageid} className="item">
+				<div className="right floated content">
+					<a
+						className="ui button"
+						href={`https://en.wikipedia.org?curid=${result.pageid}`}
+					>
+						Go
+					</a>
+				</div>
 				<div className="content">
 					<div className="header">{result.title}</div>
-					{result.snippet}
+					<span dangerouslySetInnerHTML={{ __html: result.snippet }}></span>
 				</div>
 			</div>
 		);
@@ -49,4 +61,6 @@ export default function Search() {
 			<div className="ui celled list">{renderedResults}</div>
 		</div>
 	);
-}
+};
+
+export default Search;
