@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 export default function Search() {
-	const [term, setTerm] = useState('');
+	const [term, setTerm] = useState('programming');
+	const [results, setResults] = useState([]);
+
+	console.log(results);
 
 	useEffect(() => {
 		const search = async () => {
-			await axios.get('en.wikipedia.org/w/api.php', {
+			const { data } = await axios.get('https://en.wikipedia.org/w/api.php', {
 				params: {
 					action: 'query',
 					list: 'search',
@@ -15,7 +18,10 @@ export default function Search() {
 					srsearch: term,
 				},
 			});
+
+			setResults(data.query.search);
 		};
+
 		search();
 	}, [term]);
 
@@ -23,11 +29,11 @@ export default function Search() {
 		<div>
 			<div className="ui form">
 				<div className="field">
-					<label>Enter Search Label</label>
+					<label>Enter Search Term</label>
 					<input
-						type="text"
 						value={term}
 						onChange={(e) => setTerm(e.target.value)}
+						className="input"
 					/>
 				</div>
 			</div>
